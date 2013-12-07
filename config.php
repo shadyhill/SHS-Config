@@ -7,9 +7,9 @@
 
 	//db connection stuff
 	$connect1 = "127.0.0.1";
-	$connect2 = "root";
-	$connect3 = "tiger4";
-	$db_name = "atx_shs_config";
+	$connect2 = "user";
+	$connect3 = "password";
+	$db_name = "database";
 	
 	try{	
 		$pdo = new PDO("mysql:host=$connect1;dbname=$db_name",$connect2,$connect3,
@@ -35,10 +35,10 @@
 	
 	//constants
 	
-	define('A_URL', '//shsair.local/~shsair/shsgit/shs_config/');
-	define('CUR_URL', 'http://shsair.local/~shsair/shsgit/shs_config/');
-	define('S_CUR_URL', 'http://shsair.local/~shsair/shsgit/shs_config/');
-	define('FILE_PATH','/Users/shsair/Sites/shsgit/shs_config/');
+	define('A_URL', '//local.domain/');
+	define('CUR_URL', 'http://local.domain/');
+	define('S_CUR_URL', 'http://local.domain/');
+	define('FILE_PATH','/path/to/site/');
 		
 	define('SALT','PUT_SALT_HERE');
 	

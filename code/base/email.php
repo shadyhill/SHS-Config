@@ -16,9 +16,7 @@ abstract class BaseEmail{
 		$this->_urlObj 		= $request_data["url_vars"];
 		$this->_requestObj 	= $request_data["request"];
 		$this->_pdo 		= $request_data["pdo"];
-		$this->_session 	= $request_data["session"];
-		
-		
+		$this->_session 	= $request_data["session"];		
 	}	
 	
 

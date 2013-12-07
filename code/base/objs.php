@@ -16,6 +16,18 @@ class Objs{
 
 	}
 	
+	public function __sleep(){
+		$this->_pdo = array();
+		unset($this->_pdo);
+		$obj_row = array_keys(get_object_vars($this));		
+		return $obj_row;
+	}
+
+	public function __wakeup(){
+		global $pdo;
+		$this->_pdo = $pdo;		
+	}
+
 	public function isValid(){
 		return $this->_isValid;
 	}

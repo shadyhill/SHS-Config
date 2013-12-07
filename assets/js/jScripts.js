@@ -1,6 +1,6 @@
-var a_url 	  = "//shsair.local/~shsair/shsgit/shs_config/";
-var cur_url   = "http://shsair.local/~shsair/shsgit/shs_config/";
-var s_cur_url = "http://shsair.local/~shsair/shsgit/shs_config/";
+var a_url 	  = "//local.domain/";
+var cur_url   = "http://local.domain/";
+var s_cur_url = "http://local.domain/";
 
 $.ajaxSetup ({  
     cache: false  
