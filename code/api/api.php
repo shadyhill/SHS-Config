@@ -33,7 +33,7 @@ class API{
 	    $std_classes = get_declared_classes();
 	    
 	    //required for settings
-	    require "api_config.php";
+	    require "api.config.php";
 
 	    //set the db enginer
 	    //TODO: check that one exists?
