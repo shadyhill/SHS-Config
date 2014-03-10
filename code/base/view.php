@@ -39,10 +39,12 @@ abstract class BaseView{
 		$scripts = explode(',',$this->_page->scripts);
 		foreach($scripts as $s){
 			$parts = explode('~', $s);
-			if($parts[1] == "css"){
-				if(file_exists(FILE_PATH."assets/css/".$parts[0])) $this->_cssFiles[] = $parts[0];
-			}else if($parts[1] == "js"){				
-				if(file_exists(FILE_PATH."assets/js/".$parts[0])) $this->_jsFiles[] = $parts[0];
+			if(count($parts) >= 2){
+				if($parts[1] == "css"){
+					if(file_exists(FILE_PATH."assets/css/".$parts[0])) $this->_cssFiles[] = $parts[0];
+				}else if($parts[1] == "js"){				
+					if(file_exists(FILE_PATH."assets/js/".$parts[0])) $this->_jsFiles[] = $parts[0];
+				}
 			}
 		}
 		
