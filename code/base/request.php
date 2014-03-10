@@ -11,7 +11,7 @@ class BaseRequest{
 	//constructor
 	public function __construct($pdo){
 		//get the url variable out of GET (posted by htaccess) and remove trailing slash
-		$this->_url = rtrim($_GET['url'],"/");				
+		$this->_url = rtrim(str_replace(SITE_PATH, '', $_SERVER['REQUEST_URI']),"/");
 		
 		//access the global mysql obj		
 		$this->_pdo = $pdo;			

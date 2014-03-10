@@ -39,6 +39,8 @@
 	define('CUR_URL', 'http://local.domain/');
 	define('S_CUR_URL', 'http://local.domain/');
 	define('FILE_PATH','/path/to/site/');
+
+	define('SITE_PATH','/');
 		
 	define('SALT','PUT_SALT_HERE');
 	
