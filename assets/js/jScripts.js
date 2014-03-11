@@ -1,6 +1,7 @@
-var a_url 	  = "//local.domain/";
-var cur_url   = "http://local.domain/";
-var s_cur_url = "http://local.domain/";
+var domain = document.domain;
+var a_url = "//"+domain+"/";
+var cur_url = "http://"+domain+"/";
+var s_cur_url = "http://"+domain+"/";
 
 $.ajaxSetup ({  
     cache: false  
