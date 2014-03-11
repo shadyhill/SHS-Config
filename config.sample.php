@@ -35,10 +35,10 @@
 	
 	//constants
 	
-	define('A_URL', '//local.domain/');
-	define('CUR_URL', 'http://local.domain/');
-	define('S_CUR_URL', 'http://local.domain/');
-	define('FILE_PATH','/path/to/site/');
+	define('A_URL', '//'.$_SERVER['HTTP_HOST'].'/');
+	define('CUR_URL', 'http://'.$_SERVER['HTTP_HOST'].'/');
+	define('S_CUR_URL', 'http://'.$_SERVER['HTTP_HOST'].'/');
+	define('FILE_PATH',$_SERVER['DOCUMENT_ROOT']);
 
 	define('SITE_PATH','/');
 		
