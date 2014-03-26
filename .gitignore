@@ -3,3 +3,4 @@ api_config.php
 api.config.php
 vendor/
 composer.lock
+.DS_Store
