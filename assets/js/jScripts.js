@@ -1,6 +1,6 @@
 var domain = document.domain;
-var a_url 	  = "//"+domain+"/";
-var cur_url   = "http://"+domain+"/";
+var a_url = "//"+domain+"/";
+var cur_url = "http://"+domain+"/";
 var s_cur_url = "http://"+domain+"/";
 
 $.ajaxSetup ({  

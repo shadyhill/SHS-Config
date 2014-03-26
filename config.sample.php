@@ -31,7 +31,8 @@
 	//setlocale(LC_MONETARY, 'en_US.utf8');  -- for live server
 	setlocale(LC_MONETARY, 'en_US');
 	
-	//constants	
+
+	//constants
 	define('A_URL', '//'.$_SERVER['HTTP_HOST'].'/');
 	define('CUR_URL', 'http://'.$_SERVER['HTTP_HOST'].'/');
 	define('S_CUR_URL', 'http://'.$_SERVER['HTTP_HOST'].'/');
@@ -41,4 +42,7 @@
 	define('SITE_PATH','');
 		
 	define('SALT','PUT_SALT_HERE');
+		
+	//define('','');
 ?>
+
