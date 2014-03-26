@@ -21,10 +21,8 @@
     	exit();
     }
 	
-	//the MYSQLI way...moving on...
-	//$mysqli = new mysqli($connect1, $connect2, $connect3, $db_name);
-	//$mysqli->query("SET NAMES 'utf8'");
-	//$mysqli->query("SET CHARACTER SET 'utf8'");
+	//let composer do it's job
+    require 'vendor/autoload.php';
 
 	//set the time
 	date_default_timezone_set('America/Chicago');
@@ -33,15 +31,14 @@
 	//setlocale(LC_MONETARY, 'en_US.utf8');  -- for live server
 	setlocale(LC_MONETARY, 'en_US');
 	
-	//constants
-	
-	define('A_URL', '//local.domain/');
-	define('CUR_URL', 'http://local.domain/');
-	define('S_CUR_URL', 'http://local.domain/');
-	define('FILE_PATH','/path/to/site/');
+	//constants	
+	define('A_URL', '//'.$_SERVER['HTTP_HOST'].'/');
+	define('CUR_URL', 'http://'.$_SERVER['HTTP_HOST'].'/');
+	define('S_CUR_URL', 'http://'.$_SERVER['HTTP_HOST'].'/');
+	define('FILE_PATH',$_SERVER['DOCUMENT_ROOT']);
+
+	//no trailing slash
+	define('SITE_PATH','');
 		
 	define('SALT','PUT_SALT_HERE');
-	
-		
-	//define('','');
 ?>

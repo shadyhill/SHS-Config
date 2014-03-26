@@ -11,40 +11,34 @@
 		}
 		
 		public function render(){
-		    $this->renderTemplate();
-		    //echo "need to load template: ".$this->_page->template;
-		    //echo "<br />need to load file: ".$this->_page->include_file;
-		    
-		    
+			$vObj = $this->generateView();
+		    $this->renderTemplate($vObj);		    		    
 		}
 		
+		protected function generateView(){			
+			include_once "views/".$this->_page->view_path."/".$this->_page->view_class.".php";			
+			$toArray = get_object_vars($this);
+			$vObj = new $this->_page->view_class($toArray["_page"]);					
+			$vObj->{$this->_page->view_fx}();
+
+			//must return the object
+			return $vObj;
+
+		}
+
 		//CAN THIS FUNCTION HAVE CONDITIONALS FOR LOGGED IN OR NOT?
-		protected function renderTemplate(){
-			//every page will use the start HTML template
-			include dirname(__FILE__)."/templates/site/start-html.php";
+		protected function renderTemplate($vObj){
+
+			$loader = new Twig_Loader_Filesystem(dirname(__FILE__)."/templates");
+			$twig = new Twig_Environment($loader, array(
+    			//'cache' => dirname(__FILE__)."/templates/cache",
+			));	
+			$aData = get_object_vars($vObj);
 			
-			switch($this->_page->template){
-				case "home":
-					
-					$this->loadView();
-					break;
-				case "app":
-					$this->loadView();
-					break;
-				case "one-column":
-					
-					$this->loadView();
-					
-					break;
-			}
-			
-			//and most will also use the end HTML template
-			include dirname(__FILE__)."/templates/site/end-html.php";
+			//this calls the actual template			
+			echo $twig->render($this->_page->template, $aData);
+	
 		}
 		
-		
-		protected function loadView(){
-			include dirname(__FILE__)."/views/".$this->_page->include_file;
-		}
 	}
 ?>

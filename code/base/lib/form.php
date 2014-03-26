@@ -42,8 +42,8 @@ class Form extends MagicObjs{
 		$first = TRUE;
 		
 		$sql = "SELECT *
-					FROM forms f 
-					LEFT JOIN form_fields ff on f.id = ff.form_id 
+					FROM config_forms f 
+					LEFT JOIN config_form_fields ff on f.id = ff.form_id 
 					WHERE f.form_name = :form_name
 					ORDER BY ff.f_order ASC";
 		
