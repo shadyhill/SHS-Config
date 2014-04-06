@@ -34,6 +34,7 @@
 			ob_end_clean();
 
 			return $formHTML;
+
 		}
 	}
 ?>
