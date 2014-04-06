@@ -42,10 +42,10 @@ class FormField extends MagicObjs{
     
     private function renderTextField(){
     
-	    echo '<div class="control-group">';
+	    echo '<div class="form-group">';
 		$this->renderLabel();
 			echo '<div class="controls">';
-				echo "<input type='$this->type' name='$this->name_id' id='$this->name_id' value='$this->value' placeholder='$this->placeholder' class='$this->class_override' style='$this->style_override'  />";
+				echo "<input type='$this->type' name='$this->name_id' id='$this->name_id' value='$this->value' placeholder='$this->placeholder' class='form-control $this->class_override' style='$this->style_override'  />";
 			echo '</div>';
 		echo '</div>';
     }
@@ -54,7 +54,7 @@ class FormField extends MagicObjs{
 	    echo '<div class="control-group">';
 		$this->renderLabel();
 			echo '<div class="controls">';
-				echo "<textarea id='$this->name_id' name='$this->name_id' placeholder='$this->placeholder' rows='5' class='$this->class_override' style='$this->style_override'>$this->value</textarea>";
+				echo "<textarea id='$this->name_id' name='$this->name_id' placeholder='$this->placeholder' rows='5' class='form-control $this->class_override' style='$this->style_override'>$this->value</textarea>";
 			echo '</div>';
 		echo '</div>';
     }

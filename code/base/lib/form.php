@@ -42,8 +42,8 @@ class Form extends MagicObjs{
 		$first = TRUE;
 		
 		$sql = "SELECT *
-					FROM forms f 
-					LEFT JOIN form_fields ff on f.id = ff.form_id 
+					FROM config_forms f 
+					LEFT JOIN config_form_fields ff on f.id = ff.form_id 
 					WHERE f.form_name = :form_name
 					ORDER BY ff.f_order ASC";
 		
@@ -87,7 +87,8 @@ class Form extends MagicObjs{
 		
 		$this->renderStartForm();
 		foreach($this->_formFields as $field){
-			$field->renderField($values[$field->name_id]);
+			if(isset($values[$field->name_id])) $field->renderField($values[$field->name_id]);
+			else $field->renderField('');
 		}
 		
 		$this->renderSubmit($this->_submitTxt);
@@ -142,7 +143,7 @@ class Form extends MagicObjs{
 	}
 	
 	protected function renderStart($action,$isFile = false){
-		echo "<form action='".S_CUR_URL."$action' method='post' id='".$this->_class."Form' ";
+		echo "<form role='form' action='".S_CUR_URL."$action' method='post' id='".$this->_class."Form' ";
 		if($isFile) echo 'enctype="multipart/form-data" ';
 		echo ">";
 	}
@@ -168,9 +169,10 @@ class Form extends MagicObjs{
 	}
 	
 	protected function renderSubmit($label = "Submit"){
-		echo '<div class="control-group">';
+		echo '<div class="form-group">';
 		echo '<div class="controls">';
-		echo "<input type='submit' value='$label &rarr;' class='submit' />";
+		echo "<button type='submit' class='submit btn'>$label</button>";
+		//echo "<input type='submit' value='$label' class='submit btn' />";
 		echo '</div>';
 		echo '</div>';
 	}

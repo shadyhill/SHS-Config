@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+
+{% block body %}
+
+	<div class="row">
+			<div class="container">	
+				<h3>All Articles</h3>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Title</th>
+							<th>Status</th>							
+							<th>Publish Date</th>
+							<th>Last Updated</th>
+							<th>&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% for a in articles %}
+						<tr>
+							<td><a href="/manager/articles/edit/{{a.id}}/">{{a.title}}</a></td>
+							<td>{{a.status}}</td>
+							<td>{{a.publish_date}}</td>
+							<td>{{a.updated}}</td>
+							<td><a href="/view/{{a.slug}}/" target="_blank"><i class="ionicons ion-eye" style="font-size: 22px;"></i></a></td>							
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		
+	</div>
+	
+{% endblock %}

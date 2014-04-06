@@ -5,7 +5,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
 
-RewriteRule ^(.*)$ /~shsair/shsgit/shs_git/index.php?url=$1 [QSA,L]
+RewriteRule ^(.*)$ /~shsair/shsconfig/thirdthird/index.php [QSA,L]
 
 <files *.php>
 	SetOutputFilter DEFLATE

@@ -11,19 +11,18 @@
     
     <title><?php echo $this->_page->meta_title?></title>
     
-    <link rel="stylesheet" href="<?php echo A_URL?>assets/css/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="<?php echo A_URL?>assets/css/font-awesome-4.0.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="<?php echo A_URL?>assets/css/ionicons/ionicons.min.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/font-awesome-4.0.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/css/ionicons/ionicons.min.css">
     
-    <link href="<?php echo A_URL?>assets/css/site.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/thirdthird.css" rel="stylesheet" type="text/css" />
 <?php
     foreach($this->_cssFiles as $css){
-		if($css != "") echo '<link href="'.A_URL.'assets/css/'.$css.'" rel="stylesheet" type="text/css" />';
+		if($css != "") echo '<link href="/assets/css/'.$css.'" rel="stylesheet" type="text/css" />';
 	}
 ?>
-    
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:400italic,300,400,700" rel="stylesheet" type="text/css">
-
+    <link href='//fonts.googleapis.com/css?family=Astloch:400,700|IM+Fell+French+Canon|IM+Fell+Great+Primer|Unna|Lancelot|Crimson+Text:400,700' rel='stylesheet' type='text/css'>  
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet" type="text/css">
 
 </head>
 <?php flush();?>
