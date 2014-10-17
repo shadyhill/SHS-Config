@@ -6,14 +6,12 @@ class Objs{
 	protected $_isValid;
 	protected $_pdo;
 	protected $_session;
+	protected $_maxDelay = 30;			// in seconds, how long is allowed in verifyTimestamp
 	
 	public function __construct($pdo,$session){
 		$this->_isValid = false;
 		$this->_pdo = $pdo;
-		$this->_session = $session;
-		
-		//WE MAY WANT TO PART SERVER REQUEST DATA IN HERE?
-
+		$this->_session = $session;		
 	}
 	
 	public function __sleep(){
@@ -30,6 +28,10 @@ class Objs{
 
 	public function isValid(){
 		return $this->_isValid;
+	}
+
+	public function makeValid(){
+		$this->_isValid = true;
 	}
 	
 	/**
@@ -59,7 +61,7 @@ class Objs{
 		$reserved = preg_quote('\/:*?"<>|', '/');
 		
 		//replaces all characters up through space and all past ~ along with the above reserved characters 
-		return preg_replace("/([\\x00-\\x20\\x7f-\\xff{$reserved}])/e", "_", $name); 
+		return preg_replace_callback("/([\\x00-\\x20\\x7f-\\xff{$reserved}])/", "-", $name); 
 		
 	}
 	
@@ -85,6 +87,10 @@ class Objs{
 		}else{
 		return '';		
 		}
+	}
+
+	public function returnFields(){
+		return $this->_row;
 	}
 	
 	public function generateSlug($phrase){
@@ -166,13 +172,13 @@ class Objs{
 	
 	public function fsockSend($url,$params){
 	//fire the script for the notification emails
-		ksort($params);
-        $verify = "";
-        foreach($params as $val){
-            $verify .= $val;
-        }
-        $verify = md5($verify.SALT);
-        $params["verify"] = $verify;
+
+		// generate the data verification string.
+		// This verify string is passed as a POST variable to the asynchronous function
+		// The asynchronous function can then check the value of the verify string to ensure
+		// that the calling function has permissions & that the data is correct. 
+        $params["verify"] = $this->getVerifyString($params);
+		$params["verify2"] = $this->getTimestamp();
 
 		foreach ($params as $key => &$val) {
 		  if (is_array($val)) $val = implode(',', $val);
@@ -181,7 +187,7 @@ class Objs{
 		$post_string = implode('&', $post_params);
 		
 		$parts=parse_url($url);
-		
+
 		//if ( $fp = fsockopen('ssl://' . $host, 443, $errno, $errstr, 30) ) {
 		
 		// $fp = fsockopen('ssl://'.$parts['host'],
@@ -192,7 +198,9 @@ class Objs{
 		$fp = fsockopen($parts['host'],
 		    isset($parts['port'])?$parts['port']:80,
 		    $errno, $errstr, 30);
-		
+		if (!$fp){
+			echo "opening socket failed. " . $errno . " " . $errstr;
+		}
 		$out = "POST ".$parts['path']." HTTP/1.1\r\n";
 		$out.= "Host: ".$parts['host']."\r\n";
 		$out.= "Content-Type: application/x-www-form-urlencoded\r\n";
@@ -200,12 +208,66 @@ class Objs{
 		$out.= "Connection: Close\r\n\r\n";
 		if (isset($post_string)) $out.= $post_string;
 
-		
 		fwrite($fp, $out);
+		// uncomment section below to see output from asynchronous function
+		// while (!feof($fp)) {
+		// 	echo fgets($fp, 1024);
+		// }
+		
 		fclose($fp);
 
 	}	
 
+	// getVerifyString ()
+	//
+	//	Used to generate a Verification string for use in the fsocksend function.
+	//	This same function can get called by the asynchronous function launched by fsocksend to 
+	//		ensure data purity on the receiving side. 
+	//  
+	public function getVerifyString($params) {
+		ksort($params);
+        $verify = "";
+        foreach($params as $val){
+            $verify .= $val;
+        }
+        $verify = md5($verify.SALT);
+		
+		return $verify;
+	
+	}
+	
+	// getVerifyTimestamp()
+	//
+	// Used to generate a verification timestamp for the fsocksend function
+	// Currently using encoding. Could shift to encryption if there is some concern over 
+	// 		malicious attacks.
+	public function getTimestamp() {
+		
+		return base64_encode(time());
+	}
+	
+	
+	// verifyTimestamp($encodedTime)
+	//
+	// Used to verify the timestamp after a asynchronous function call
+	// Input:
+	// 		$encodedTime 	- encoded timestamp to verify
+	//		$_maxDelay		- hardcoded value - maximum delay in seconds 
+	// Output:
+	//		true if difference between current time and encoded time is less than maxDelay
+	//		false otherwise
+	//
+	public function verifyTimestamp($encodedTime){
+		$currentTS = time();
+		$prevTS = base64_decode($encodedTime);
+		if (($currentTS - $prevTS) > $this->_maxDelay){
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	
 	public function randID($n = 10){
 		$pass="";
 		$chars = "23456789qwertyupasdfghjkzxcvbnmQWERTYUPASDFGHJKZXCVBNM";

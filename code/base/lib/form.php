@@ -64,7 +64,7 @@ class Form extends MagicObjs{
 				$this->_submitTxt 			= $obj->button_txt;
 				$this->_preProcess			= $obj->pre_process;
 				$this->_postProcess			= $obj->post_process;
-				$this->_ajaxURL				= $obj->ajax_url;
+				$this->_ajaxURL				= $obj->ajax_url;				
 				
 				$first = FALSE;
 				
@@ -116,7 +116,8 @@ class Form extends MagicObjs{
 	}
 	
 	private function renderFormID(){
-		echo "id='$this->_formName' ";
+		$name = strtolower(str_replace(" ", "_", $this->_formName));
+		echo "id='$name' ";
 	}
 	
 	private function renderMethod(){
@@ -139,7 +140,7 @@ class Form extends MagicObjs{
 	}
 	
 	private function renderClass(){
-		echo "class='$this->_formClass' ";
+		echo "class='$this->_formClass col-sm-12' ";
 	}
 	
 	protected function renderStart($action,$isFile = false){
@@ -157,7 +158,7 @@ class Form extends MagicObjs{
 	}
 	
 	protected function renderFormE(){
-		echo "<div id='formE'>";
+		echo "<div class='formE'>";
 			if(isset($_GET['e'])){
 				switch($_GET['e']){
 					case "failed-creation":	echo "Failed to create entry in database. Please try again.";		break;
@@ -169,7 +170,8 @@ class Form extends MagicObjs{
 	}
 	
 	protected function renderSubmit($label = "Submit"){
-		echo '<div class="form-group">';
+		echo "<span class='clearfix'></span>";
+		echo '<div class="form-group col-sm-12 clearfix">';
 		echo '<div class="controls">';
 		echo "<button type='submit' class='submit btn'>$label</button>";
 		//echo "<input type='submit' value='$label' class='submit btn' />";

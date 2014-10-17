@@ -1,5 +1,4 @@
 <?php 
-
 class Session{
 	
 	//local class variables
@@ -10,27 +9,32 @@ class Session{
 		$this->_sessionObjs = array();
 	}
 		
-	protected function setPrePost($prePost = "POST"){
+	public function setPrePost($prePost = "POST"){
 		$this->_prePost = $prePost;
 	}	
 	
 	//looks for a valid obj with the given field name
-	protected function verifySessionObj($name){
+	public function verifySessionObj($name,$next = ''){		
+		if($next != ""){
+			$next = ltrim($next,"/");
+			$path = LOGIN_PATH."?next=$next";
+		}else $path = LOGIN_PATH;
+
 		if($this->isSessionSet("$name")){
 			$sObj = $this->getSessionObj("$name");
 			
 			//check to make sure that the obj is still in tact and active
 			if(!$sObj->isValid()){
-				$this->handleInvalidSession("Session expired for $name",$this->_dir);
+				$this->handleInvalidSession("Session expired for $name",$path);
 				exit();
 			}
 		}else{
-			$this->handleInvalidSession("No session set for $name",$this->_dir);
+			$this->handleInvalidSession("No session set for $name",$path);
 			exit();
 		}
 	}
 	
-	protected function verifySessionValue($name,$value){
+	public function verifySessionValue($name,$value,$next = ''){
 		if($this->isSessionSet($name)){
 			$sVal = $this->getSessionValue($name);
 			
@@ -52,20 +56,21 @@ class Session{
 	}
 	
 	//base64_encodes and serializes the given obj into the given session name
-	protected function setSessionObj($sess,$obj){
+	public function setSessionObj($sess,$obj){
 		$_SESSION[$sess] = base64_encode(serialize($obj));
 	}
 	
 	//returns an unserialized and base64_decoded obj from the given session name
-	protected function getSessionObj($sess){
-		return unserialize(base64_decode($_SESSION[$sess]));
+	public function getSessionObj($sess){
+		if(isset($_SESSION[$sess])) return unserialize(base64_decode($_SESSION[$sess]));
+		else return new StdClass;
 	}
 	
-	protected function setSessionValue($field,$value){
+	public function setSessionValue($field,$value){
 		$_SESSION[$field] = $value;
 	}
 	
-	protected function getSessionValue($field){
+	public function getSessionValue($field){
 		return $_SESSION[$field];
 	}
 	

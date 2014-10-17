@@ -26,35 +26,12 @@ class BaseProcessor{
 		$this->_pdo 		= $request_data["pdo"];
 		$this->_session 	= $request_data["session"];
 		
-		//$this->_fxObj 		= new FX();
-		//$this->_logObj 		= new Log();
-		//$this->_hVars 		= array();
-		
-		//$this->_urlVars 	= $urlVars;
-		//$this->_url 		= implode("/",$this->_urlVars);
-		
-		//$this->_objIndex 	= 1;
-		//$this->_fxIndex 	= 2;
-		
-		//$this->cleanHTTPVariables();
 	}
 	
 	public function run(){
 		$obj = $this->_urlObj->model;
 		$fx	 = $this->_urlObj->fx;
-		
-		//not a dynamic function 
-		//not sure we need this though, if we do "decorators" on objects
-		/*
-if($obj == ""){
-			$urls = explode("/",current($this->_urlObj));
-			$aIndex = array_search($this->_requestObj->request, $urls);
-			if($aIndex !== false && $aIndex <= count($urls) - 2){
-				$obj = $urls[$aIndex+1];
-				$fx = $urls[$aIndex+2];
-			}
-		}
-*/
+		$tid = $this->_urlObj->tid;
 		
 		if(file_exists(FILE_PATH."code/site/objs/$obj.php")){
 			include_once FILE_PATH."code/site/objs/$obj.php";

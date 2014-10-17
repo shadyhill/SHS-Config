@@ -3,6 +3,7 @@
         "pixel418/markdownify": "2.1.*",
         "michelf/php-markdown": "1.4.*@dev",
         "twig/twig": "1.*",
-        "phpmailer/phpmailer": "dev-master"
+        "phpmailer/phpmailer": "dev-master",
+		"aws/aws-sdk-php": "2.*"
     }
 }

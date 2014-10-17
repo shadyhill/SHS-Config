@@ -16,14 +16,43 @@ class MagicObjs extends Objs {
 		$qData = array("id" => $id);
 		$sql = "SELECT * FROM $this->_table WHERE id = :id LIMIT 1;";
 		$stmt = $this->_pdo->prepare($sql);
-		$res = $stmt->execute($qData);		
-		$this->makeFromData($res->fetch());
+		$stmt->execute($qData);		
+		$this->makeFromData($stmt->fetch());
 	}
 	
 	public function makeFromData($obj) {
-		$this->_row = get_object_vars($obj);
-		$this->formatMadeData();
+		if(!empty($obj)){
+			$this->_row = get_object_vars($obj);
+			$this->formatMadeData();
+		}
 	}
+
+	public function assignData($data){
+		$this->_row = $data;
+	}
+
+	public function makeFromQuery($data){
+		$sql = "SELECT * FROM $this->_table WHERE ";
+		$first = true;
+		foreach($data as $key => $val){
+			if($first){
+				$first = false;
+			}else{
+				$sql .= "AND ";
+			}
+			$sql .= "$key = :$key ";
+		}	
+		$stmt = $this->_pdo->prepare($sql);
+		try{
+            $stmt->execute($data);
+        }catch(PDOException $e){
+            //TODO: handle error in JSON
+            return $e->getMessage();
+            exit();
+        }
+        $this->makeFromData($stmt->fetch());
+	}
+
 	
 	protected function formatMadeData(){
 		//this can be overriden
@@ -34,7 +63,7 @@ class MagicObjs extends Objs {
 		$this->_table = htmlentities($table);
 	}
 	
-	protected function mapPostVars(){
+	public function mapPostVars(){
 		foreach($_POST as $key => $val){
 			if($key != "pre_process" &&  $key != "post_process" && $key != "ajax_url"){
 				$this->$key = $val;
@@ -63,7 +92,8 @@ class MagicObjs extends Objs {
 		return $this->_row;
 	}
 	
-	protected function save() {
+	//$mapID will save the ID on creating a new obj
+	public function save($mapID = true) {
 		// build the INSERT statement
 		$sqlA = $sqlB = "";	
 		
@@ -119,29 +149,14 @@ class MagicObjs extends Objs {
     		// echo "Line: ".$e->getLine();
     		// echo "Trace: ".$e->getTraceAsString();
     	}
+		
+    	//if we created an object, then we should add the id to the object
+    	if(empty($this->_row['id']) && $mapID){
+    		$this->id = $this->_pdo->lastInsertId();
+    	}
 
-			// //got this code from http://www.devmorgan.com/blog/?s=dydl
-			// $bind_names[] = $types;
-			
-			// for ($i=0; $i<count($params);$i++) {//go through incoming params and added em to array
-   //      	    $bind_name = 'bind' . $i;       //give them an arbitrary name
-   //      	    $$bind_name = $params[$i];      //add the parameter to the variable variable
-   //      	    $bind_names[] = &$$bind_name;   //now associate the variable as an element in an array
-   //      	}
-        
-   //      	call_user_func_array(array($stmt,'bind_param'),$bind_names);
-		
-		//run the statement		
-		//$res = $stmt->execute();
-		
 		//just return boolean and let objects handle response
-		return (object)array("status"=>true);
-		
-		// if($res === false){
-		// 	return (object)array("status"=>false,"type" => "data_integrity", "error"=>$this->_pdo->errorInfo());
-		// }else{
-		// 	return $stmt;
-		// }
+		return (object)array("status"=>true);				
 	}
 	
 	

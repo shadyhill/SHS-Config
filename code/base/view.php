@@ -19,76 +19,87 @@ abstract class BaseView{
 		$this->_session 	= $request_data["session"];
 		
 		$this->_template = $this->_includeFile = "";
-		$this->_jsFiles = $this->_cssFiles = array();	
-		
-		$this->getDBPageData();	
+		$this->_jsFiles = $this->_cssFiles = array();			
 	}	
-
-	public function returnPDO(){
-		return $this->_pdo;
+	
+	public function run(){
+		//call the appropriate function based on the request type
+		//TODO: probably need to verify/handle an incorrect request type
+		$this->{$this->_requestObj->request}();						
 	}
 
-	public function returnSession(){
-		return $this->_session;
+	public function ajax(){
+		$vObj = $this->generateViewObj("views/models",$this->_urlObj->model);
+		$ajax = $vObj->{$this->_urlObj->method}();
+		echo $ajax;
+		exit();
 	}
 
-	public function returnPage(){
-		return $this->_page;
+	public function process(){
+		$vObj = $this->generateViewObj("views/models",$this->_urlObj->model);
+		$process = $vObj->{$this->_urlObj->method}();
+		header("Location: ".$process);
+		exit();
 	}
 
-	public function returnRequest(){
-		return $this->_requestObj;
+	public function render(){		
+		//$this->getDBPageData();	
+		$vObj = $this->generateViewObj($this->_requestObj->view_path,$this->_requestObj->view_class);
+		$vObj->setPage($this->_requestObj);
+		$vObj->setUrlObj($this->_urlObj);
+		$vObj->{$this->_requestObj->view_method}();
+	    $this->renderTemplate($vObj);		    		    
 	}
 
-	public function returnURLObj(){
-		return $this->_urlObj;
+	//this is a special function for return just content for an ajax request
+	public function content(){
+		$vObj = $this->generateViewObj($this->_requestObj->view_path, $this->_urlObj->model);
+		$vObj->setPage($this->_requestObj);
+		$vObj->setUrlObj($this->_urlObj);
+		$vObj->{$this->_urlObj->method}();
+		//need to dynamically set the template from the url variables
+		$this->_requestObj->template = $this->_urlObj->model."/".$this->_urlObj->template.".html";
+		$this->renderTemplate($vObj);
 	}
 	
-	//EVENTUALLY NEED TO CACHE THIS CALL IN A SESSION OR MEMCACHE OR REDIS
-	protected function getDBPageData(){
-		$rid = $this->_requestObj->id;
-		$sql = "SELECT pd.*, group_concat(concat_ws('~',ps.script,ps.script_type) ORDER BY ps.load_order) AS scripts
-					FROM config_page_data pd 
-					LEFT JOIN config_page_scripts ps ON pd.router_id = ps.router_id
-					WHERE pd.router_id = $rid
-					GROUP BY router_id";
-				
-		$res = $this->_pdo->query($sql);
-		
-		try{
-			$this->_page = $res->fetch();
-		}catch(PDOException $e){  
-    		echo $e->getMessage();
-    		exit();
-    	}
-		
-		//need to check that _page isn't empty
-    	if(empty($this->_page)){
-    		echo "no results in page_data. need to load 404.";
-    		exit();
-    	}
+	protected function generateViewObj($path,$class){			
+		include_once FILE_PATH."code/site/$path/$class".".php";			
+		$toArray = get_object_vars($this);
 
-		$scripts = explode(',',$this->_page->scripts);
-		foreach($scripts as $s){
-			$parts = explode('~', $s);
-			if(count($parts) >= 2){
-				if($parts[1] == "css"){
-					if(file_exists(FILE_PATH."assets/css/".$parts[0])) $this->_page->cssFiles[] = $parts[0];
-				}else if($parts[1] == "js"){				
-					if(file_exists(FILE_PATH."assets/js/".$parts[0])) $this->_page->jsFiles[] = $parts[0];
-				}
-			}
-		}
+		//routine for generating camelcase ClassName
+		$obj = $this->underscoreToCamelCase($class);		
 		
-		
+		//add the "View" namespace
+		$obj .= "View";		
 
-		//WE CAN COME BACK AND VERIFY THE VIEW AND TEMPLATE EXIST, FOR NOW, WE KNOW?
-		// if($this->_page->include_file == "" || !file_exists(FILE_PATH."code/site/views/".$this->_page->include_file)){
-		// 	//need to serve up a 404
-		// 	//$this->_includeFile = "STATUS-CODES/404.php";
-		// 	echo "we could not find the include file. need to load custom 404 for: ".$this->_page->include_file;
-		// 	exit();
-		// }
+		//make the view object
+		$vObj = new $obj($this->_pdo, $this->_session);								
+
+		$methods = get_class_methods($vObj);
+
+		//return the view obj
+		return $vObj;
+	}
+
+	private function underscoreToCamelCase($word){
+		$word_els = explode("_",$word);
+		$obj = "";
+		foreach($word_els as $el) $obj .= ucfirst($el);
+		return $obj;
+	}
+
+	//CAN THIS FUNCTION HAVE CONDITIONALS FOR LOGGED IN OR NOT?
+	protected function renderTemplate($vObj){
+
+		$loader = new Twig_Loader_Filesystem(FILE_PATH."code/site/templates");
+		$twig = new Twig_Environment($loader, array(
+			//'cache' => dirname(__FILE__)."/templates/cache",
+		));	
+		$aData = get_object_vars($vObj);
+		
+		//this calls the actual template			
+		echo $twig->render($this->_requestObj->template, $aData);
+
 	}
 	
 }

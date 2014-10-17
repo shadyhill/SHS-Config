@@ -12,6 +12,7 @@ class FormField extends MagicObjs{
 	    switch($this->type){
 		    case "text":
 		    case "email":
+		    case "tel":
 		    case "password":
 		    	$this->renderTextField();
 		    	break;
@@ -42,19 +43,19 @@ class FormField extends MagicObjs{
     
     private function renderTextField(){
     
-	    echo '<div class="form-group">';
+	    echo "<div class='form-group $this->class_override'>";
 		$this->renderLabel();
 			echo '<div class="controls">';
-				echo "<input type='$this->type' name='$this->name_id' id='$this->name_id' value='$this->value' placeholder='$this->placeholder' class='form-control $this->class_override' style='$this->style_override'  />";
+				echo "<input type='$this->type' name='$this->name_id' id='$this->name_id' value='$this->value' placeholder='$this->placeholder' tabindex=$this->tab_order class='form-control' style='$this->style_override'  />";
 			echo '</div>';
 		echo '</div>';
     }
     
     private function renderTextArea(){
-	    echo '<div class="control-group">';
+	    echo "<div class='form-group $this->class_override'>";
 		$this->renderLabel();
 			echo '<div class="controls">';
-				echo "<textarea id='$this->name_id' name='$this->name_id' placeholder='$this->placeholder' rows='5' class='form-control $this->class_override' style='$this->style_override'>$this->value</textarea>";
+				echo "<textarea id='$this->name_id' name='$this->name_id' placeholder='$this->placeholder' rows='8' tabindex=$this->tab_order class='form-control' style='$this->style_override'>$this->value</textarea>";
 			echo '</div>';
 		echo '</div>';
     }
@@ -63,10 +64,10 @@ class FormField extends MagicObjs{
 		$displays 	= explode("|",$this->dd_displays);
 		$values 	= explode("|",$this->dd_values);
 		
-		echo '<div class="control-group">';
+		echo "<div class='form-group $this->class_override'>";
 		$this->renderLabel();
 			echo '<div class="controls">';
-				echo "<select id='$this->name_id' name='$this->name_id' class='$this->class_override' style='$this->style_override'>";
+				echo "<select id='$this->name_id' name='$this->name_id' class='' style='$this->style_override'>";
 		foreach($displays as $key => $d){
 			echo '<option value="'.$values[$key].'"';
 			if($values[$key] == $select) echo 'selected="selected"';
@@ -80,7 +81,7 @@ class FormField extends MagicObjs{
 	
 	public function renderCheckBox(){
 		
-		echo '<div class="control-group">';
+		echo "<div class='form-group $this->class_override'>";
 		$this->renderLabel();
 			echo '<div class="controls">';
 				echo "<input type='checkbox' id='$this->name_id' name='$this->name_id' value='1' ";
