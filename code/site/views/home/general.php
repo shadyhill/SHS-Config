@@ -1,11 +1,11 @@
 <?php
 require_once dirname(__FILE__)."/../viewobj.php";
 
-class General extends ViewObj{
+class GeneralView extends ViewObj{
 	
 	//$meta would be stuff like css includes, js includes, and meta tags
-	public function __construct($page){
-		parent::__construct($page);
+	public function __construct($page,$session){
+		parent::__construct($page,$session);
 		//nothing for now
 		//but could have default include paths?
 	}
