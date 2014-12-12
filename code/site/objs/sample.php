@@ -1,14 +1,12 @@
 <?php
 	require_once dirname(__FILE__)."/../../base/magicobjs.php";
 	
-class Article extends MagicObjs{
+class SampleObj extends MagicObjs{
     
     public function __construct($pdo,$session = array()){
     	parent::__construct($pdo,$session);
-    	    	
+        $this->setTable('db_table');
     }
-
     
 }
-
 ?>
