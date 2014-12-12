@@ -5,9 +5,9 @@
 # http://www.sequelpro.com/
 # http://code.google.com/p/sequel-pro/
 #
-# Host: 127.0.0.1 (MySQL 5.5.14)
-# Database: atx_xmaslist
-# Generation Time: 2014-10-17 04:14:50 +0000
+# Host: 127.0.0.1 (MySQL 5.6.21)
+# Database: shsclean
+# Generation Time: 2014-12-12 05:28:29 +0000
 # ************************************************************
 
 
@@ -18,26 +18,6 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
-
-# Dump of table config_admin_logins
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `config_admin_logins`;
-
-CREATE TABLE `config_admin_logins` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `manager_id` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `user` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `pass` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `active` int(11) DEFAULT NULL,
-  `permission` int(2) DEFAULT NULL,
-  `stamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `user` (`user`),
-  UNIQUE KEY `manager_id` (`manager_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 
 
 # Dump of table config_form_fields
@@ -157,55 +137,6 @@ VALUES
 	(14,'New Project','ajax/project/create/','AJAX','#project-create','post','submitAJAX',NULL,NULL,NULL,'Create Project',NULL,1,NULL,'2014-05-04 08:51:43');
 
 /*!40000 ALTER TABLE `config_forms` ENABLE KEYS */;
-UNLOCK TABLES;
-
-
-# Dump of table config_manager_logins
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `config_manager_logins`;
-
-CREATE TABLE `config_manager_logins` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `manager_id` varchar(30) CHARACTER SET utf8 DEFAULT NULL,
-  `user` varchar(30) CHARACTER SET utf8 DEFAULT NULL,
-  `pass` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
-  `active` int(11) DEFAULT NULL,
-  `permission` int(2) DEFAULT NULL,
-  `stamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `user` (`user`),
-  UNIQUE KEY `manager_id` (`manager_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-
-
-# Dump of table config_page_data
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `config_page_data`;
-
-CREATE TABLE `config_page_data` (
-  `router_id` int(11) DEFAULT NULL,
-  `template` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `view_path` varchar(100) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `view_class` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `view_fx` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `meta_title` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-  `meta_description` varchar(255) CHARACTER SET utf8 DEFAULT '',
-  `meta_keywords` varchar(255) CHARACTER SET utf8 DEFAULT '',
-  KEY `router_id` (`router_id`),
-  CONSTRAINT `router_id_fk` FOREIGN KEY (`router_id`) REFERENCES `config_url_router` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-LOCK TABLES `config_page_data` WRITE;
-/*!40000 ALTER TABLE `config_page_data` DISABLE KEYS */;
-
-INSERT INTO `config_page_data` (`router_id`, `template`, `view_path`, `view_class`, `view_fx`, `meta_title`, `meta_description`, `meta_keywords`)
-VALUES
-	(1,'home/index.html','views/home','general','index','Shady Hill Studios','Shady Hill Studios Config Framework','SHS');
-
-/*!40000 ALTER TABLE `config_page_data` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
