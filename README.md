@@ -24,7 +24,7 @@ Major updates include:
     ```
 
    Add the following to the file
-    ```
+    ```html
     <VirtualHost *:80>
         ServerName *new_project*
         DocumentRoot /path/to/project/
