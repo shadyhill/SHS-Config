@@ -11,7 +11,7 @@ Major updates include:
 * Support for Composer
 * Support for Backbone, Handlebars, and Grunt
 
-##Installtion Instructions Coming Soon
+## Installation Instructions Coming Soon
 
 1. Clone repo into local folder
 
